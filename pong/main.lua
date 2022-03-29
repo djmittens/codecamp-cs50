@@ -10,11 +10,13 @@ VIRTUAL_HEIGHT = 243
 PADDLE_SPEED = 200 -- good value multiplied by dt
 
 PLAYER_1 = {
+    name = "Player 1",
     paddle = paddle:new(10, 30, 5, 20),
     score = 0
 }
 
 PLAYER_2 = {
+    name = "Player 2",
     paddle = paddle:new(VIRTUAL_WIDTH - 15, VIRTUAL_HEIGHT - 50, 5, 20),
     score = 0
 }
@@ -51,10 +53,14 @@ function love.keypressed(key)
     if key == 'escape' then
         love.event.quit()
     elseif key == 'enter' or key == 'return' then
-        if GAME_STATE == 'start' then
+        if GAME_STATE == 'start' or GAME_STATE == 'serve' then
             GAME_STATE = 'play'
-        else
+        elseif GAME_STATE == 'victory' then
             GAME_STATE = 'start'
+            PLAYER_1.score = 0
+            PLAYER_2.score = 0
+        else
+            GAME_STATE = 'serve'
             BALL = ball:new(VIRTUAL_WIDTH / 2 - 2, VIRTUAL_HEIGHT / 2 - 2, 4)
         end
     end
@@ -79,6 +85,19 @@ function love.update(dt)
         PLAYER_1.paddle:update(dt)
         PLAYER_2.paddle:update(dt)
         BALL:update(dt, PADDLES)
+        if(BALL.x < 0) then
+            PLAYER_2.score = PLAYER_2.score + 1
+            BALL = ball:new(VIRTUAL_WIDTH / 2 - 2, VIRTUAL_HEIGHT / 2 - 2, 4)
+            GAME_STATE = 'serve'
+        end
+        if(BALL.x > VIRTUAL_WIDTH) then
+            PLAYER_1.score = PLAYER_1.score + 1
+            BALL = ball:new(VIRTUAL_WIDTH / 2 - 2, VIRTUAL_HEIGHT / 2 - 2, 4)
+            GAME_STATE = 'serve'
+        end
+    end
+    if PLAYER_1.score == 5 or PLAYER_2.score == 5 then
+        GAME_STATE = 'victory'
     end
 end
 
@@ -94,9 +113,19 @@ function love.draw()
     -- Yet another api change that got me rolling
     love.graphics.clear(40. / 255, 45. / 255, 52. / 255, 1) -- Cool Pongish background sampled from rando internet
 
-    love.graphics.setFont(smallFont)
-    love.graphics.printf( -- Neat function to print hello world
-    'Hello Pong!', 0, 20, VIRTUAL_WIDTH, 'center')
+    if GAME_STATE == 'start' then
+        love.graphics.setFont(smallFont)
+        love.graphics.printf( -- Neat function to print hello world
+        'Welcome to PONG! Please press Enter to begin', 0, 20, VIRTUAL_WIDTH, 'center')
+    elseif GAME_STATE == 'serve' then
+        love.graphics.setFont(smallFont)
+        love.graphics.printf( -- Neat function to print hello world
+        'Serve!', 0, 20, VIRTUAL_WIDTH, 'center')
+    elseif GAME_STATE == 'victory' then
+        love.graphics.setFont(smallFont)
+        love.graphics.printf( -- Neat function to print hello world
+        'Player wins!', 0, 20, VIRTUAL_WIDTH, 'center')
+    end
 
     -- draw a left paddle
     PLAYER_1.paddle:draw()
