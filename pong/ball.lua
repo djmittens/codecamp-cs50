@@ -21,6 +21,8 @@ function ball:update(dt, paddles)
     if(self.y < 0 or self.y > VIRTUAL_HEIGHT - self.size) then
         self.d_y = -self.d_y
         self.y = math.min(VIRTUAL_HEIGHT - self.size, math.max(0, self.y))
+
+        if(SOUNDS.wall_hit) then SOUNDS.wall_hit:play() end
     end
     for _, p in pairs(paddles) do
         if(self:collides(p)) then
@@ -47,6 +49,7 @@ function ball:collides(paddle)
     if(self.y > paddle.y + paddle.height or paddle.y > self.y + self.size) then
         return false
     end
+    if(SOUNDS.paddle_hit) then SOUNDS.paddle_hit:play() end
     return true
 end
 

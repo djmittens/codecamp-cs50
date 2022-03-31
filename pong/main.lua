@@ -27,6 +27,8 @@ BALL = ball:new(VIRTUAL_WIDTH / 2 - 2, VIRTUAL_HEIGHT / 2 - 2, 4)
 
 GAME_STATE = 'start'
 
+SOUNDS = {}
+
 
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
@@ -47,6 +49,11 @@ function love.load()
     })
     love.window.setTitle("Pong 0.0.1")
 
+    SOUDNS = {
+        ['wall_hit'] = love.audio.newSource('sounds/wall_hit.wav', 'static'),
+        ['paddle_hit'] = love.audio.newSource('sounds/paddle_hit.wav', 'static'),
+        ['score'] = love.audio.newSource('sounds/score.wav', 'static'),
+    }
 end
 
 function love.keypressed(key)
@@ -89,11 +96,13 @@ function love.update(dt)
             PLAYER_2.score = PLAYER_2.score + 1
             BALL = ball:new(VIRTUAL_WIDTH / 2 - 2, VIRTUAL_HEIGHT / 2 - 2, 4)
             GAME_STATE = 'serve'
+            if(SOUNDS.score) then SOUNDS.score:play() end
         end
         if(BALL.x > VIRTUAL_WIDTH) then
             PLAYER_1.score = PLAYER_1.score + 1
             BALL = ball:new(VIRTUAL_WIDTH / 2 - 2, VIRTUAL_HEIGHT / 2 - 2, 4)
             GAME_STATE = 'serve'
+            if(SOUNDS.score) then SOUNDS.score:play() end
         end
     end
     if PLAYER_1.score == 5 or PLAYER_2.score == 5 then
