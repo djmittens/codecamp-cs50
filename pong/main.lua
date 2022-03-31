@@ -44,7 +44,7 @@ function love.load()
 
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
         fullscreen = false,
-        resizable = false,
+        resizable = true,
         vsync = true
     })
     love.window.setTitle("Pong 0.0.1")
@@ -54,6 +54,10 @@ function love.load()
         ['paddle_hit'] = love.audio.newSource('sounds/paddle_hit.wav', 'static'),
         ['score'] = love.audio.newSource('sounds/score.wav', 'static'),
     }
+end
+
+function love.resize(w, h)
+    push:resize(w, h)
 end
 
 function love.keypressed(key)
