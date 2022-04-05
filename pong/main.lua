@@ -29,7 +29,6 @@ GAME_STATE = 'start'
 
 SOUNDS = {}
 
-
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
 
@@ -49,11 +48,13 @@ function love.load()
     })
     love.window.setTitle("Pong 0.0.1")
 
-    SOUDNS = {
+    SOUNDS = {
         ['wall_hit'] = love.audio.newSource('sounds/wall_hit.wav', 'static'),
         ['paddle_hit'] = love.audio.newSource('sounds/paddle_hit.wav', 'static'),
         ['score'] = love.audio.newSource('sounds/score.wav', 'static'),
     }
+
+    print('Load Complete, beginning gamemplay...')
 end
 
 function love.resize(w, h)
