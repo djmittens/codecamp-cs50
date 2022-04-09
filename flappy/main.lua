@@ -1,7 +1,6 @@
-
 local push = require('push')
 local bird = require('bird')
-local pipe = require('pipe')
+local pair = require('pipe-pair')
 
 WINDOW_HEIGHT = 720
 WINDOW_WIDTH = 1280
@@ -17,6 +16,7 @@ local g_scroll = 0
 local g_speed = 60
 local spawnTimer = 0
 local pipes = {}
+local lastY = -PIPE_HEIGHT + math.random(80) + 20
 
 BG_LOOP_POINT = 413
 
@@ -25,9 +25,9 @@ function love.load()
     love.window.setTitle('Floppy birb')
     bird:init()
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
-        vsync=false,
-        fullscreen=false,
-        resizeable=true
+        vsync = false,
+        fullscreen = false,
+        resizeable = true
     })
     love.keyboard.keysPressed = {}
 end
@@ -38,7 +38,7 @@ end
 
 function love.keypressed(key)
     love.keyboard.keysPressed[key] = true
-    if key=='escape' then
+    if key == 'escape' then
         love.event.quit(0)
     end
 end
@@ -54,14 +54,16 @@ function love.update(dt)
 
     spawnTimer = spawnTimer + dt
     if spawnTimer > 2 then
-        table.insert(pipes, pipe:new())
+        local y = math.max(-PIPE_HEIGHT + 10, math.min(lastY + math.random(-20, 20), VIRTUAL_HEIGHT - 90 - PIPE_HEIGHT))
+        lastY = y
+        table.insert(pipes, pair:new(y))
         spawnTimer = 0
     end
 
     for k, pipe in pairs(pipes) do
         print(pipe)
         pipe:update(dt)
-        if pipe.x < -pipe.width then
+        if pipe.remove then
             table.remove(pipes, k)
         end
     end
