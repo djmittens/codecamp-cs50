@@ -1,0 +1,32 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "run - Linux",
+      "type": "shell",
+      "command": "love2d .",
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "close": false,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      }
+    },
+    {
+      "label": "run - Mac",
+      "type": "shell",
+      "command": "love .",
+      "problemMatcher": [],
+      "presentation": {
+        "close": true,
+        "reveal": "silent",
+      }
+    }
+  ]
+}
