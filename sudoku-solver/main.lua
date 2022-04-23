@@ -2,7 +2,7 @@ W_DIM = 1000
 
 local board = require('board')
 
-GAMEBOARD = board:new('board1')
+GAMEBOARD = board:new(BOARD1)
 
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
